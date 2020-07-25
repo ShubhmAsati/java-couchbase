@@ -36,11 +36,13 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<scope>runtime</scope>
+			<version>42.2.14</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -69,6 +71,15 @@
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>2.10.5</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.vladmihalcea/hibernate-types-52 -->
+		<dependency>
+			<groupId>com.vladmihalcea</groupId>
+			<artifactId>hibernate-types-52</artifactId>
+			<version>2.9.12</version>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>
@@ -79,5 +90,7 @@
 			</plugin>
 		</plugins>
 	</build>
+
+
 
 </project>
