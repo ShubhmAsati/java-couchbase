@@ -1,5 +1,9 @@
 package com.auth0.jobportal.entity;
 
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,20 +22,22 @@ import java.sql.Date;
 @NoArgsConstructor
 @Builder
 public class UsersEntity extends BaseEntity{
-    @Id
-    @Column(name="")
-    private  long userId;
 
-    @Column(name="")
     private  String email;
 
-    @Column(name="")
+    @Column(name="mobile_number")
     private  String mobileNumber;
 
-    @Column(name="")
     private  String password;
 
-    @Column(name="")
-    private  AddressEntity userType;
+    @Column(name = "user_type")
+    private String userType;
+
+    @Column(name = "is_active")
+    private Boolean isActive;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_details_id", referencedColumnName = "id")
+    private  UserDetailsEntity userDetailsEntity;
 
 }
