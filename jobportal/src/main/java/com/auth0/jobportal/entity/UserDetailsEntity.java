@@ -1,7 +1,10 @@
 package com.auth0.jobportal.entity;
 
+import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -23,6 +26,10 @@ import org.springframework.web.bind.annotation.Mapping;
 @Builder
 @Table(name = "user_details")
 public class UserDetailsEntity extends BaseEntity{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
     private  String email;
 

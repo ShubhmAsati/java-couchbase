@@ -4,6 +4,7 @@ import static com.auth0.jobportal.converter.OtpDetailsConverter.toEntity;
 import static com.auth0.jobportal.converter.OtpDetailsConverter.toOtpDetailsDto;
 
 import com.auth0.jobportal.entity.OtpManagerEntity;
+import com.auth0.jobportal.exception.NotFoundException;
 import com.auth0.jobportal.model.OtpDetailsDto;
 import com.auth0.jobportal.repository.jpa.JpaOtpManagerRepository;
 import java.util.UUID;
@@ -21,7 +22,7 @@ public class OtpManagerRepository {
   }
 
   public OtpDetailsDto getOtpDetails(UUID userId){
-    return toOtpDetailsDto(jpaOtpManagerRepository.findByUserId(userId));
+    return toOtpDetailsDto(jpaOtpManagerRepository.findByUserId(userId).orElseThrow(() -> new NotFoundException("User does not exist.")));
   }
 
 }

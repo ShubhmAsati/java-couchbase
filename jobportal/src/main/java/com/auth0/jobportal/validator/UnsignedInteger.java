@@ -15,7 +15,7 @@ import javax.validation.Payload;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UnsignedInteger {
 
-  String message() default "should be a valid Integer of 6 digit";
+  String message() default "otp should be a valid Integer of 6 digit";
 
   Class<?>[] groups() default {};
 

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -46,12 +47,16 @@ public class RegistrationController {
   public ResponseEntity<?> registrationStepTwo(
       @Valid @RequestBody RegistrationStepTwoRequest registrationStepTwoRequest) {
     String userId = userRegistrationService.registrationStepTwo(toDto(registrationStepTwoRequest));
-    return ResponseEntity.status(HttpStatus.OK).headers(httpHeaders -> httpHeaders.add(AUTHORIZATION, jwtUtil.generateToken(userId))).build();
+    return ResponseEntity.status(HttpStatus.OK)
+        .headers(httpHeaders -> httpHeaders.add(AUTHORIZATION, jwtUtil.generateToken(userId)))
+        .build();
   }
 
-  @GetMapping("/resend-otp/{userId}/{newRequired}")
-  public ResponseEntity<?> resendOtp(@PathVariable(value = "userId") String userId, @PathVariable(value = "newRequired") Boolean newRequired){
-    userRegistrationService.resendOTP(userRequestValidator.validateAndReturnUserId(userId), newRequired);
+  @GetMapping("/resend-otp/{userId}")
+  public ResponseEntity<?> resendOtp(@PathVariable(value = "userId") String userId,
+      @RequestParam(value = "newRequired", defaultValue = "false", required = false) Boolean newRequired) {
+    userRegistrationService
+        .resendOTP(userRequestValidator.validateAndReturnUserId(userId), newRequired);
     return ResponseEntity.ok().build();
   }
 

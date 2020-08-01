@@ -1,5 +1,6 @@
 package com.auth0.jobportal.model;
 
+import java.util.UUID;
 import lombok.Builder;
 import lombok.Data;
 
@@ -7,7 +8,7 @@ import lombok.Data;
 @Builder
 public class UserDetailsDto {
 
-  private String userDetailsId;
+  private UUID userDetailsId;
 
   private String email;
 

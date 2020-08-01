@@ -28,6 +28,7 @@ public class ParkedUserConverter {
 
   public ParkedUserEntity toParkedUserEntity(ParkedUserDto parkedUserDto) {
     return ParkedUserEntity.builder()
+        .id(parkedUserDto.getTempUserId())
         .mobileNumber(parkedUserDto.getMobileNumber())
         .password(parkedUserDto.getPassword())
         .firstName(parkedUserDto.getFirstName())

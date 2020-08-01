@@ -22,7 +22,7 @@ public class UserRegistrationService {
   private final OTPService otpService;
 
   public ParkedUserDto registrationStepOne(ParkedUserDto parkedUserDto){
-    ParkedUserDto parkedUserDto1 = parkedUserRepository.saveParkedUser(parkedUserDto);
+    ParkedUserDto parkedUserDto1 = parkedUserRepository.saveParkedUser(parkedUserDto, TRUE);
     otpService.generateAndSendOTP(parkedUserDto1.getTempUserId(), parkedUserDto1.getMobileNumber(), TRUE);
     return parkedUserDto1;
   }
@@ -32,17 +32,14 @@ public class UserRegistrationService {
     otpService.validateOtp(stepTwoDto);
     ParkedUserDto parkedUserDto = parkedUserRepository.getParkedUserById(stepTwoDto.getUserId());
     parkedUserDto.setIsVerified(TRUE);
-    parkedUserRepository.saveParkedUser(parkedUserDto);
+    parkedUserRepository.saveParkedUser(parkedUserDto, FALSE);
     return userRepository.saveUser(toUserDto(parkedUserDto)).getUserId().toString();
   }
 
   public void resendOTP(UUID userId, Boolean isNewOTPRequired) {
-    if(isNewOTPRequired) {
-      otpService.resendOTP(userId);
-    } else {
-      ParkedUserDto parkedUserDto = parkedUserRepository.getParkedUserById(userId);
-      otpService.generateAndSendOTP(parkedUserDto.getTempUserId(), parkedUserDto.getMobileNumber(), FALSE);
-    }
+    ParkedUserDto parkedUserDto = parkedUserRepository.getParkedUserById(userId);
+    otpService.resendOTP(parkedUserDto, isNewOTPRequired);
+
 
   }
 }

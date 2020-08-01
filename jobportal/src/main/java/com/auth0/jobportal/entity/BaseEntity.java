@@ -2,30 +2,35 @@ package com.auth0.jobportal.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.UUID;
 import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import lombok.Getter;
-import org.springframework.data.annotation.CreatedDate;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.LastModifiedDate;
 
 @MappedSuperclass
-@Getter
+@Data
 public abstract class BaseEntity implements Serializable {
 
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private UUID id;
-
-  @CreatedDate
-  @Column(name = "created_at")
+  @CreationTimestamp
+  @Column(name = "created_at", nullable = false, updatable = false)
   private LocalDateTime createdAt;
 
-  @LastModifiedDate
+  @UpdateTimestamp
   @Column(name = "updated_at")
   private LocalDateTime updatedAt;
+
+  @PrePersist
+  protected void onCreate() {
+    this.updatedAt = LocalDateTime.now();
+  }
+
+  @PreUpdate
+  protected void onUpdate() {
+    this.updatedAt = LocalDateTime.now();
+  }
+
 }

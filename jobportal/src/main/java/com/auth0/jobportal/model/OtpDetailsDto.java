@@ -9,6 +9,7 @@ import lombok.Data;
 @Builder
 public class OtpDetailsDto {
 
+  private UUID otpId;
   private Integer otp;
   private LocalDateTime lastUpdatedAt;
   private UUID userId;

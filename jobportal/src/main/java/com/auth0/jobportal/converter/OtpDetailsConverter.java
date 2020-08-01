@@ -10,17 +10,20 @@ public class OtpDetailsConverter {
 
   public static OtpDetailsDto toOtpDetailsDto(OtpManagerEntity otpManagerEntity) {
     return OtpDetailsDto.builder()
+        .otpId(otpManagerEntity.getId())
         .lastUpdatedAt(otpManagerEntity.getUpdatedAt())
         .otp(otpManagerEntity.getOtp())
         .userId(otpManagerEntity.getUserId())
+        .resendCount(otpManagerEntity.getResendCount())
         .build();
   }
 
   public static OtpManagerEntity toEntity(OtpDetailsDto otpDetailsDto){
-    return OtpManagerEntity.builder()
-        .resendCount(otpDetailsDto.getResendCount()!=null? otpDetailsDto.getResendCount():0)
+     return OtpManagerEntity.builder()
+        .resendCount(otpDetailsDto.getResendCount())
         .userId(otpDetailsDto.getUserId())
         .otp(otpDetailsDto.getOtp())
+         .id(otpDetailsDto.getOtpId())
         .build();
   }
 

@@ -9,6 +9,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public class InvalidOTPException extends RuntimeException {
 
-  private List<ErrorDetails> errorDetails;
+  public InvalidOTPException(String message){
+    super(message);
+  }
 
 }
