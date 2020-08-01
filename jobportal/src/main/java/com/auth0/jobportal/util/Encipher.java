@@ -1,0 +1,18 @@
+package com.auth0.jobportal.util;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+
+@Component
+@RequiredArgsConstructor
+public class Encipher {
+
+  private final PasswordEncoder passwordEncoder;
+
+  public String encrypt(String password){
+    return passwordEncoder.encode(password);
+  }
+
+
+}

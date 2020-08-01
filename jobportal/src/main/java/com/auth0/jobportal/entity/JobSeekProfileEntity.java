@@ -1,17 +1,17 @@
-package com.auth0.jobportal.entity;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import javax.persistence.Entity;
-
-@Entity
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class JobSeekProfileEntity extends JobProfileEntity {
-
-}
+//package com.auth0.jobportal.entity;
+//
+//import lombok.AllArgsConstructor;
+//import lombok.Builder;
+//import lombok.Data;
+//import lombok.NoArgsConstructor;
+//
+//import javax.persistence.Entity;
+//
+//@Entity
+//@Data
+//@Builder
+//@NoArgsConstructor
+//@AllArgsConstructor
+//public class JobSeekProfileEntity extends JobProfileEntity {
+//
+//}

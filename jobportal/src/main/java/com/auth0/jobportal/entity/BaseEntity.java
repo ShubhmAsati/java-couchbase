@@ -1,27 +1,31 @@
 package com.auth0.jobportal.entity;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.UUID;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import java.sql.Date;
-
 @MappedSuperclass
 @Getter
-public abstract class BaseEntity {
+public abstract class BaseEntity implements Serializable {
 
 
-    @Column(name="")
-    private String UUID;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private UUID id;
 
-    @CreatedDate
-    @Column(name = "")
-    private Date createdDate;
+  @CreatedDate
+  @Column(name = "created_at")
+  private LocalDateTime createdAt;
 
-    @LastModifiedDate
-    @Column(name = "")
-    private Date updatedDate;
+  @LastModifiedDate
+  @Column(name = "updated_at")
+  private LocalDateTime updatedAt;
 }
