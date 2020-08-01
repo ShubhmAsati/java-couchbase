@@ -5,18 +5,15 @@ import static com.auth0.jobportal.constants.ApplicationConstants.ERR_MSG_INVALID
 import static com.auth0.jobportal.constants.ApplicationConstants.OTP_MESSAGE;
 import static java.lang.Boolean.FALSE;
 import static java.lang.String.format;
-import static java.util.Collections.singletonList;
 
 import com.auth0.jobportal.config.PropertyConfig;
 import com.auth0.jobportal.exception.InvalidOTPException;
-import com.auth0.jobportal.model.ErrorDetails;
+import com.auth0.jobportal.model.OTPDto;
 import com.auth0.jobportal.model.OtpDetailsDto;
 import com.auth0.jobportal.model.ParkedUserDto;
-import com.auth0.jobportal.model.StepTwoDto;
 import com.auth0.jobportal.repository.OtpManagerRepository;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
@@ -31,14 +28,14 @@ public class OTPService {
   private final PropertyConfig propertyConfig;
   private final OtpManagerRepository otpManagerRepository;
 
-  public void generateAndSendOTP(UUID userId, String phoneNumber, Boolean isNew) {
+  public OtpDetailsDto generateAndSendOTP(UUID userId, String phoneNumber, Boolean isNew) {
     if (isNew) {
-      otpManagerRepository.saveOtp(buildOtpDetailsDto(userId, phoneNumber));
+      return otpManagerRepository.saveOtp(buildOtpDetailsDto(userId, phoneNumber));
     } else {
       OtpDetailsDto otpDetailsDto = otpManagerRepository.getOtpDetails(userId);
       otpDetailsDto.setOtp(sendOTP(phoneNumber, generateOtp()));
       otpDetailsDto.setResendCount(0);
-      otpManagerRepository.saveOtp(otpDetailsDto);
+      return otpManagerRepository.saveOtp(otpDetailsDto);
     }
   }
 
@@ -62,12 +59,14 @@ public class OTPService {
     return ThreadLocalRandom.current().nextInt(100000, 999999);
   }
 
-  public void validateOtp(StepTwoDto stepTwoDto) {
-    OtpDetailsDto otpDetailsDto = otpManagerRepository.getOtpDetails(stepTwoDto.getUserId());
+  public OtpDetailsDto validateOtp(OTPDto otpDto) {
+    OtpDetailsDto otpDetailsDto = otpManagerRepository.getOtpDetails(otpDto.getUserId());
     validateExpiry(otpDetailsDto.getLastUpdatedAt());
-    if (!otpDetailsDto.getOtp().equals(stepTwoDto.getOtp())) {
+    if (!otpDetailsDto.getOtp().equals(otpDto.getOtp())) {
       throw new InvalidOTPException(ERR_MSG_INVALID_OTP);
     }
+    otpManagerRepository.deleteByUserId(otpDetailsDto.getOtpId());
+    return otpDetailsDto;
   }
 
   private void validateExpiry(LocalDateTime dateTime) {
@@ -82,12 +81,20 @@ public class OTPService {
     if (isNewRequired) {
       generateAndSendOTP(parkedUserDto.getTempUserId(), parkedUserDto.getMobileNumber(), FALSE);
     } else {
-      if (propertyConfig.getOtpResendCount().equals(otpDetailsDto.getResendCount())) {
-        throw new InvalidOTPException(ERR_MSG_EXPIRED_OTP);
-      }
+      validateResendCounts(otpDetailsDto.getResendCount());
       otpDetailsDto.setResendCount(otpDetailsDto.getResendCount() + 1);
       otpManagerRepository.saveOtp(otpDetailsDto);
       sendOTP(parkedUserDto.getMobileNumber(), otpDetailsDto.getOtp());
     }
+  }
+
+  private void validateResendCounts(Integer resendCount) {
+    if (propertyConfig.getOtpResendCount().equals(resendCount)) {
+      throw new InvalidOTPException(ERR_MSG_EXPIRED_OTP);
+    }
+  }
+
+  public void updateOtpType(OtpDetailsDto otpDetailsDto) {
+    otpManagerRepository.saveOtp(otpDetailsDto);
   }
 }

@@ -18,17 +18,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "otp_manager")
-public class OtpManagerEntity extends BaseEntity{
+public class OtpManagerEntity extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id;
 
-  public Integer otp;
+  private Integer otp;
   @Column(name = "user_id", unique = true)
-  public UUID userId;
+  private UUID userId;
 
   @Column(name = "resend_count")
-  public Integer resendCount;
+  private Integer resendCount;
+
+  @Column(name = "is_login_otp")
+  private Boolean isLoginOTP;
 
 }

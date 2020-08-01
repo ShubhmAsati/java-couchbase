@@ -1,17 +1,17 @@
 package com.auth0.jobportal.controller;
 
 import static com.auth0.jobportal.constants.ApplicationConstants.CONTEXT_URL;
-import static com.auth0.jobportal.converter.StepTwoRequestConverter.toDto;
+import static com.auth0.jobportal.converter.OTPRequestConverter.toDto;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import com.auth0.jobportal.converter.ParkedUserConverter;
 import com.auth0.jobportal.model.ParkedUserDto;
 import com.auth0.jobportal.model.request.RegistrationStepOneRequest;
-import com.auth0.jobportal.model.request.RegistrationStepTwoRequest;
-import com.auth0.jobportal.model.response.RegistrationStepOneResponse;
+import com.auth0.jobportal.model.request.VerifyOTPRequest;
+import com.auth0.jobportal.model.response.JobPortalResponse;
 import com.auth0.jobportal.service.UserRegistrationService;
 import com.auth0.jobportal.util.JwtUtil;
-import com.auth0.jobportal.validator.UserRequestValidator;
+import com.auth0.jobportal.validator.RequestValidator;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,11 +31,11 @@ public class RegistrationController {
 
   private final UserRegistrationService userRegistrationService;
   private final ParkedUserConverter parkedUserConverter;
-  private final UserRequestValidator userRequestValidator;
+  private final RequestValidator requestValidator;
   private final JwtUtil jwtUtil;
 
   @PostMapping("/step-one")
-  public ResponseEntity<RegistrationStepOneResponse> registrationStepOne(
+  public ResponseEntity<JobPortalResponse> registrationStepOne(
       @Valid @RequestBody RegistrationStepOneRequest registrationStepOneRequest) {
     ParkedUserDto parkedUserDto = userRegistrationService
         .registrationStepOne(parkedUserConverter.toParkedUserDto(registrationStepOneRequest));
@@ -44,9 +44,9 @@ public class RegistrationController {
   }
 
   @PostMapping("/verify-otp")
-  public ResponseEntity<?> registrationStepTwo(
-      @Valid @RequestBody RegistrationStepTwoRequest registrationStepTwoRequest) {
-    String userId = userRegistrationService.registrationStepTwo(toDto(registrationStepTwoRequest));
+  public ResponseEntity<?> verifyOTP(
+      @Valid @RequestBody VerifyOTPRequest verifyOTPRequest) {
+    String userId = userRegistrationService.verifyOTP(toDto(verifyOTPRequest));
     return ResponseEntity.status(HttpStatus.OK)
         .headers(httpHeaders -> httpHeaders.add(AUTHORIZATION, jwtUtil.generateToken(userId)))
         .build();
@@ -56,7 +56,7 @@ public class RegistrationController {
   public ResponseEntity<?> resendOtp(@PathVariable(value = "userId") String userId,
       @RequestParam(value = "newRequired", defaultValue = "false", required = false) Boolean newRequired) {
     userRegistrationService
-        .resendOTP(userRequestValidator.validateAndReturnUserId(userId), newRequired);
+        .resendOTP(requestValidator.validateAndReturnUserId(userId), newRequired);
     return ResponseEntity.ok().build();
   }
 

@@ -5,7 +5,7 @@ import static java.lang.Boolean.FALSE;
 import com.auth0.jobportal.entity.ParkedUserEntity;
 import com.auth0.jobportal.model.ParkedUserDto;
 import com.auth0.jobportal.model.request.RegistrationStepOneRequest;
-import com.auth0.jobportal.model.response.RegistrationStepOneResponse;
+import com.auth0.jobportal.model.response.JobPortalResponse;
 import com.auth0.jobportal.util.Encipher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -48,7 +48,7 @@ public class ParkedUserConverter {
         .build();
   }
 
-  public RegistrationStepOneResponse toResponse(ParkedUserDto parkedUserDto) {
-    return RegistrationStepOneResponse.builder().userId(parkedUserDto.getTempUserId()).build();
+  public JobPortalResponse toResponse(ParkedUserDto parkedUserDto) {
+    return JobPortalResponse.builder().userId(parkedUserDto.getTempUserId()).build();
   }
 }

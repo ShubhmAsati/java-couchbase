@@ -17,11 +17,13 @@ public class UserRepository {
   private final JpaUsersRepository jpaUsersRepository;
 
   public UserDto findUserByMobileNumber(String mobileNumber) {
-    return toUserDto(jpaUsersRepository.findByMobileNumber(mobileNumber));
+    return toUserDto(jpaUsersRepository.findByMobileNumber(mobileNumber)
+        .orElseThrow(() -> new NotFoundException("User does not exist.")));
   }
 
-  public UserDto findUserById(UUID userId){
-    return toUserDto(jpaUsersRepository.findById(userId).orElseThrow(() -> new NotFoundException("User does not exist.")));
+  public UserDto findUserById(UUID userId) {
+    return toUserDto(jpaUsersRepository.findById(userId)
+        .orElseThrow(() -> new NotFoundException("User does not exist.")));
   }
 
 

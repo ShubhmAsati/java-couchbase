@@ -14,5 +14,6 @@ public class OtpDetailsDto {
   private LocalDateTime lastUpdatedAt;
   private UUID userId;
   private Integer resendCount;
+  private Boolean isLoginOTP;
 
 }

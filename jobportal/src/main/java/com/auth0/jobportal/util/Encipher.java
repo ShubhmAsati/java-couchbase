@@ -10,8 +10,12 @@ public class Encipher {
 
   private final PasswordEncoder passwordEncoder;
 
-  public String encrypt(String password){
+  public String encrypt(String password) {
     return passwordEncoder.encode(password);
+  }
+
+  public Boolean matches(String password, String encodedPassword) {
+    return passwordEncoder.matches(password, encodedPassword);
   }
 
 

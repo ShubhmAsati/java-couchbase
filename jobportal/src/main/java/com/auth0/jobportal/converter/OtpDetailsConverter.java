@@ -15,15 +15,17 @@ public class OtpDetailsConverter {
         .otp(otpManagerEntity.getOtp())
         .userId(otpManagerEntity.getUserId())
         .resendCount(otpManagerEntity.getResendCount())
+        .isLoginOTP(otpManagerEntity.getIsLoginOTP())
         .build();
   }
 
-  public static OtpManagerEntity toEntity(OtpDetailsDto otpDetailsDto){
-     return OtpManagerEntity.builder()
+  public static OtpManagerEntity toEntity(OtpDetailsDto otpDetailsDto) {
+    return OtpManagerEntity.builder()
         .resendCount(otpDetailsDto.getResendCount())
         .userId(otpDetailsDto.getUserId())
         .otp(otpDetailsDto.getOtp())
-         .id(otpDetailsDto.getOtpId())
+        .id(otpDetailsDto.getOtpId())
+        .isLoginOTP(otpDetailsDto.getIsLoginOTP())
         .build();
   }
 
