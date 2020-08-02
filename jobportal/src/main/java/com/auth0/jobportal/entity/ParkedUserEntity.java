@@ -1,7 +1,11 @@
 package com.auth0.jobportal.entity;
 
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +20,11 @@ import lombok.NoArgsConstructor;
 @Table(name = "parked_user_entity")
 public class ParkedUserEntity extends BaseEntity {
 
-  @Column(name = "mobile_number")
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private UUID id;
+
+  @Column(name = "mobile_number", unique = true)
   private String mobileNumber;
 
   private String password;

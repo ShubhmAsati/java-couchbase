@@ -19,6 +19,14 @@ public class JwtUtil {
     return extractClaim(token, Claims::getSubject);
   }
 
+  public String extractUserId(String token) {
+    String authToken = null;
+    if (token != null && token.startsWith("Bearer ")) {
+      authToken = token.substring(7);
+    }
+    return extractClaim(authToken, Claims::getSubject);
+  }
+
   public Date extractExpiration(String token) {
     return extractClaim(token, Claims::getExpiration);
   }
@@ -27,6 +35,7 @@ public class JwtUtil {
     final Claims claims = extractAllClaims(token);
     return claimsResolver.apply(claims);
   }
+
   private Claims extractAllClaims(String token) {
     return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
   }
@@ -42,7 +51,8 @@ public class JwtUtil {
 
   private String createToken(Map<String, Object> claims, String subject) {
 
-    return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+    return Jwts.builder().setClaims(claims).setSubject(subject)
+        .setIssuedAt(new Date(System.currentTimeMillis()))
         .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
         .signWith(SignatureAlgorithm.HS256, secret).compact();
   }

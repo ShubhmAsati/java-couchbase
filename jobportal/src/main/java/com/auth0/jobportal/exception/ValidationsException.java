@@ -1,14 +1,9 @@
 package com.auth0.jobportal.exception;
 
-import com.auth0.jobportal.model.ErrorDetails;
-import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+public class ValidationsException extends RuntimeException {
 
-@Getter
-@AllArgsConstructor
-public class ValidationsException extends RuntimeException{
-
-  private List<ErrorDetails> errorDetails;
+  public ValidationsException(String message) {
+    super(message);
+  }
 
 }

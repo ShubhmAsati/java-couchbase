@@ -1,4 +1,4 @@
-package com.auth0.jobportal.model.response;
+package com.auth0.jobportal.model;
 
 import java.util.UUID;
 import lombok.Builder;
@@ -6,8 +6,9 @@ import lombok.Data;
 
 @Data
 @Builder
-public class RegistrationStepOneResponse {
+public class OTPDto {
 
   private UUID userId;
+  private Integer otp;
 
 }

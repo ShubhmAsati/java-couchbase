@@ -10,8 +10,6 @@ public class UserDto {
 
   private UUID userId;
 
-  private String email;
-
   private String mobileNumber;
 
   private String password;

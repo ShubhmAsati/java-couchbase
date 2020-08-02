@@ -5,7 +5,7 @@ import com.auth0.jobportal.validator.UnsignedInteger;
 import lombok.Data;
 
 @Data
-public class RegistrationStepTwoRequest {
+public class VerifyOTPRequest {
 
   @UUID
   private String userId;

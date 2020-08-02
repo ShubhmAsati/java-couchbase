@@ -17,7 +17,6 @@ public class UserConverter {
 
   public static UserDto toUserDto(UsersEntity usersEntity) {
     return UserDto.builder()
-        .email(usersEntity.getEmail())
         .userId(usersEntity.getId())
         .userType(usersEntity.getUserType())
         .mobileNumber(usersEntity.getMobileNumber())
@@ -29,15 +28,17 @@ public class UserConverter {
 
   private static UserDetailsDto buildUserDetailDto(UserDetailsEntity userDetailsEntity) {
     return UserDetailsDto.builder()
+        .userDetailsId(userDetailsEntity.getId())
         .firstName(userDetailsEntity.getFirstName())
         .lastName(userDetailsEntity.getLastName())
         .email(userDetailsEntity.getEmail())
-        .address(buildAddressDto(userDetailsEntity.getAddress()))
+        .address(userDetailsEntity.getAddress()!=null?buildAddressDto(userDetailsEntity.getAddress()):null)
         .build();
   }
 
   private static Address buildAddressDto(AddressEntity address) {
     return Address.builder()
+        .addressId(address.getId())
         .addressLine1(address.getAddressLine1())
         .city(address.getCity())
         .country(address.getCountry())
@@ -65,7 +66,7 @@ public class UserConverter {
 
   public static UsersEntity toUserEntity(UserDto userDto) {
     return UsersEntity.builder()
-        .email(userDto.getEmail())
+        .id(userDto.getUserId())
         .isActive(userDto.getIsActive())
         .mobileNumber(userDto.getMobileNumber())
         .password(userDto.getPassword())
@@ -76,15 +77,17 @@ public class UserConverter {
 
   private static UserDetailsEntity buildUserDetailsEntity(UserDetailsDto userDetailsDto) {
     return UserDetailsEntity.builder()
+        .id(userDetailsDto.getUserDetailsId())
         .email(userDetailsDto.getEmail())
         .firstName(userDetailsDto.getFirstName())
         .lastName(userDetailsDto.getLastName())
-        .address(buildAddressEntity(userDetailsDto.getAddress()))
+        .address(userDetailsDto.getAddress()!=null?buildAddressEntity(userDetailsDto.getAddress()):null)
         .build();
   }
 
   private static AddressEntity buildAddressEntity(Address address) {
     return AddressEntity.builder()
+        .id(address.getAddressId())
         .addressLine1(address.getAddressLine1())
         .city(address.getCity())
         .country(address.getCountry())

@@ -21,6 +21,6 @@ public class SecureUserService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
     UserDto userDto = userRepository.findUserById(fromString(userName));
-    return new User(userDto.getMobileNumber(), userDto.getPassword(), emptyList());
+    return new User(userDto.getUserId().toString(), userDto.getPassword(), emptyList());
   }
 }
