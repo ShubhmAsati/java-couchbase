@@ -1,15 +1,13 @@
 package com.auth0.jobportal.entity;
 
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import com.vladmihalcea.hibernate.type.range.Range;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.util.UUID;
 
 @Entity
@@ -17,12 +15,8 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "JOB_POST_PROFILE")
-@TypeDef(
-        name = "jsonb",
-        typeClass = JsonBinaryType.class
-)
-public class JobPostProfileEntity extends BaseEntity {
+@Table(name = "JOB_SEEKER_PROFILE")
+public class JobSeekerProfileEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,11 +24,11 @@ public class JobPostProfileEntity extends BaseEntity {
     private UUID id;
 
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "USER_ID", referencedColumnName = "ID")
     private UsersEntity user;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "ADDRESS_ID", referencedColumnName = "ID")
     private AddressEntity address;
 
@@ -43,6 +37,7 @@ public class JobPostProfileEntity extends BaseEntity {
 
     @Column(name = "JOB_TYPE")
     private String jobType;
+
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
@@ -56,9 +51,4 @@ public class JobPostProfileEntity extends BaseEntity {
 
     private Range<Integer> compensation;
 
-    private boolean status;
-
-    private long applicants;
-
-    private char gender;
 }

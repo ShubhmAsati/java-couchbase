@@ -14,4 +14,18 @@ public class ApplicationConstants {
   public static final String ERR_MSG_INVALID_PHONE_NUMBER = "mobileNumber should be a valid number of 10 digits with +91";
   public static final String ERR_MSG_INVALID_PASSWORD = "Invalid password, please try again";
 
+
+  //Jobs Related
+  public static final String JOBS_URL=CONTEXT_URL+"/jobs/v1";
+  public static final int JOBS_PER_PAGE=20;
+
+  //Job Search Related
+  public static final String JOBS_SEARCH="/search-jobs";
+
+  //Job Error
+  public static final String ERR_MSG_INVALID_JOB_ID= "Invalid Job ID, please try again";
+  public static final String ERR_MSG_INVALID_JOB_REVIEWS_CREATION="Job Reviews not created";
+
+
+
 }
