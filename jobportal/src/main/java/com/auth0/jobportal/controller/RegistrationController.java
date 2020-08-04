@@ -1,6 +1,8 @@
 package com.auth0.jobportal.controller;
 
 import static com.auth0.jobportal.constants.ApplicationConstants.CONTEXT_URL;
+import static com.auth0.jobportal.constants.ApplicationConstants.OTP_SUCCESS_MESSAGE;
+import static com.auth0.jobportal.constants.ApplicationConstants.VERIFIED_OTP_MESSAGE;
 import static com.auth0.jobportal.converter.OTPRequestConverter.toDto;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -12,6 +14,7 @@ import com.auth0.jobportal.model.response.JobPortalResponse;
 import com.auth0.jobportal.service.UserRegistrationService;
 import com.auth0.jobportal.util.JwtUtil;
 import com.auth0.jobportal.validator.RequestValidator;
+import java.util.UUID;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -44,20 +47,26 @@ public class RegistrationController {
   }
 
   @PostMapping("/verify-otp")
-  public ResponseEntity<?> verifyOTP(
+  public ResponseEntity<JobPortalResponse> verifyOTP(
       @Valid @RequestBody VerifyOTPRequest verifyOTPRequest) {
     String userId = userRegistrationService.verifyOTP(toDto(verifyOTPRequest));
     return ResponseEntity.status(HttpStatus.OK)
         .headers(httpHeaders -> httpHeaders.add(AUTHORIZATION, jwtUtil.generateToken(userId)))
-        .build();
+        .body(buildJobPortalResponse(null, VERIFIED_OTP_MESSAGE));
   }
 
   @GetMapping("/resend-otp/{userId}")
-  public ResponseEntity<?> resendOtp(@PathVariable(value = "userId") String userId,
+  public ResponseEntity<JobPortalResponse> resendOtp(@PathVariable(value = "userId") String userId,
       @RequestParam(value = "newRequired", defaultValue = "false", required = false) Boolean newRequired) {
-    userRegistrationService
-        .resendOTP(requestValidator.validateAndReturnUserId(userId), newRequired);
-    return ResponseEntity.ok().build();
+    return ResponseEntity.ok().body(buildJobPortalResponse(userRegistrationService
+            .resendOTP(requestValidator.validateAndReturnUserId(userId), newRequired),
+        OTP_SUCCESS_MESSAGE));
   }
 
+  private JobPortalResponse buildJobPortalResponse(UUID userId, String message) {
+    return JobPortalResponse.builder()
+        .userId(userId)
+        .message(message)
+        .build();
+  }
 }

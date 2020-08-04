@@ -1,8 +1,11 @@
 package com.auth0.jobportal.entity;
 
+import com.auth0.jobportal.enums.OtpType;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,5 +36,9 @@ public class OtpManagerEntity extends BaseEntity {
 
   @Column(name = "is_login_otp")
   private Boolean isLoginOTP;
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "otp_type")
+  private OtpType otpType;
 
 }

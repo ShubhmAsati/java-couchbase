@@ -1,5 +1,6 @@
 package com.auth0.jobportal.model;
 
+import com.auth0.jobportal.enums.OtpType;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.Builder;
@@ -15,5 +16,6 @@ public class OtpDetailsDto {
   private UUID userId;
   private Integer resendCount;
   private Boolean isLoginOTP;
+  private OtpType otpType;
 
 }
