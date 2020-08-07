@@ -16,6 +16,7 @@ public class OtpDetailsConverter {
         .userId(otpManagerEntity.getUserId())
         .resendCount(otpManagerEntity.getResendCount())
         .isLoginOTP(otpManagerEntity.getIsLoginOTP())
+        .otpType(otpManagerEntity.getOtpType())
         .build();
   }
 
@@ -26,6 +27,7 @@ public class OtpDetailsConverter {
         .otp(otpDetailsDto.getOtp())
         .id(otpDetailsDto.getOtpId())
         .isLoginOTP(otpDetailsDto.getIsLoginOTP())
+        .otpType(otpDetailsDto.getOtpType())
         .build();
   }
 

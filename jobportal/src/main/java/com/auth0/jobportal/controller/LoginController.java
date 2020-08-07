@@ -1,12 +1,16 @@
 package com.auth0.jobportal.controller;
 
 import static com.auth0.jobportal.constants.ApplicationConstants.CONTEXT_URL;
+import static com.auth0.jobportal.constants.ApplicationConstants.OTP_SUCCESS_MESSAGE;
+import static com.auth0.jobportal.constants.ApplicationConstants.RESET_PASSWORD_MESSAGE;
+import static com.auth0.jobportal.constants.ApplicationConstants.VERIFIED_OTP_MESSAGE;
 import static com.auth0.jobportal.converter.OTPRequestConverter.toDto;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import com.auth0.jobportal.model.request.LoginRequest;
+import com.auth0.jobportal.model.request.ResendOtpRequest;
 import com.auth0.jobportal.model.request.ResetPasswordRequest;
 import com.auth0.jobportal.model.request.VerifyOTPRequest;
 import com.auth0.jobportal.model.response.JobPortalResponse;
@@ -41,25 +45,27 @@ public class LoginController {
       @PathVariable("mobileNumber") String mobileNumber) {
     requestValidator.validateMobileNumber(mobileNumber);
     return ResponseEntity.status(HttpStatus.OK).body(
-        JobPortalResponse.builder().userId(loginService.login(mobileNumber, TRUE)).build());
+        buildJobPortalResponse(loginService.login(mobileNumber, TRUE), OTP_SUCCESS_MESSAGE));
   }
 
   @PostMapping("/v1/login-by-password")
-  public ResponseEntity<?> loginByPassword(@Valid @RequestBody LoginRequest loginRequest) {
+  public ResponseEntity<JobPortalResponse> loginByPassword(
+      @Valid @RequestBody LoginRequest loginRequest) {
     UUID userId = loginService
         .loginByPassword(loginRequest.getMobileNumber(), loginRequest.getPassword());
     return ResponseEntity.status(HttpStatus.OK).headers(
         httpHeaders -> httpHeaders.add(AUTHORIZATION, jwtUtil.generateToken(userId.toString())))
-        .build();
+        .body(buildJobPortalResponse(null, VERIFIED_OTP_MESSAGE));
   }
 
   @PostMapping("/v1/verify-otp")
-  public ResponseEntity<?> verifyOTP(@Valid @RequestBody VerifyOTPRequest verifyOTPRequest,
+  public ResponseEntity<JobPortalResponse> verifyOTP(
+      @Valid @RequestBody VerifyOTPRequest verifyOTPRequest,
       @RequestParam(value = "isLoginOTP") Boolean isLoginOTP) {
     UUID userId = loginService.verifyOTP(toDto(verifyOTPRequest), isLoginOTP);
     return ResponseEntity.status(HttpStatus.OK).headers(
         httpHeaders -> httpHeaders.add(AUTHORIZATION, jwtUtil.generateToken(userId.toString())))
-        .build();
+        .body(buildJobPortalResponse(null, VERIFIED_OTP_MESSAGE));
   }
 
   @GetMapping("/v1/forgot-password/{mobileNumber}")
@@ -67,7 +73,7 @@ public class LoginController {
       @PathVariable("mobileNumber") String mobileNumber) {
     requestValidator.validateMobileNumber(mobileNumber);
     return ResponseEntity.status(HttpStatus.OK).body(
-        JobPortalResponse.builder().userId(loginService.login(mobileNumber, FALSE)).build());
+        buildJobPortalResponse(loginService.login(mobileNumber, FALSE), OTP_SUCCESS_MESSAGE));
   }
 
   @PostMapping("/v2/reset-password")
@@ -75,8 +81,23 @@ public class LoginController {
       @Valid @RequestBody ResetPasswordRequest resetPasswordRequest,
       @RequestHeader(AUTHORIZATION) String token) {
     loginService.resetPassword(resetPasswordRequest.getPassword(), token);
-    return ResponseEntity.ok().build();
+    return ResponseEntity.ok().body(buildJobPortalResponse(null, RESET_PASSWORD_MESSAGE));
   }
 
+  @PostMapping("/v1/resend-otp")
+  public ResponseEntity<?> resendOTP(
+      @Valid @RequestBody ResendOtpRequest resendOtpRequest,
+      @RequestParam(value = "newRequired", defaultValue = "false", required = false) Boolean newRequired) {
+    return ResponseEntity.ok().body(
+        buildJobPortalResponse(loginService.resendOTP(resendOtpRequest.getUserId(), newRequired),
+            OTP_SUCCESS_MESSAGE));
+  }
+
+  private JobPortalResponse buildJobPortalResponse(UUID userId, String message) {
+    return JobPortalResponse.builder()
+        .userId(userId)
+        .message(message)
+        .build();
+  }
 
 }

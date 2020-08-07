@@ -35,7 +35,7 @@ public class JobPortalControllerAdvice {
   @ExceptionHandler(InvalidOTPException.class)
   public ResponseEntity<ErrorResponse> handleInvalidOtpException(InvalidOTPException e) {
     log.info(VALIDATION_ERROR, e);
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(buildErrorResponse(e.getMessage()));
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(buildErrorResponse(e.getMessage()));
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -52,6 +52,13 @@ public class JobPortalControllerAdvice {
   public ResponseEntity<ErrorResponse> handleValidationsException(NotFoundException e) {
     log.info(NOT_FOUND_EXCEPTION, e);
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(buildErrorResponse(e.getMessage()));
+  }
+
+  @ExceptionHandler(EntityAlreadyExistException.class)
+  public ResponseEntity<ErrorResponse> handleEntityAlreadyExistException(
+      EntityAlreadyExistException e) {
+    log.info(VALIDATION_ERROR, e);
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(buildErrorResponse(e.getMessage()));
   }
 
   private ErrorResponse buildErrorResponse(String message) {
