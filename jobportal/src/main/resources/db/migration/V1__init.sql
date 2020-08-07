@@ -60,6 +60,7 @@ CREATE TABLE IF NOT EXISTS auth0.users_details (
 	first_name varchar NULL,
 	last_name varchar NULL,
 	address_id varchar NULL,
+
 	CONSTRAINT users_details_pk PRIMARY KEY (user_id)
 );
 

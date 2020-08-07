@@ -14,5 +14,6 @@ public class JobPostProfiles {
     Iterable<JobPostProfileDto> currentProfiles;
     Iterable<JobPostProfileDto> nextProfiles;
     Iterable<JobPostProfileDto> prevProfiles;
-    //int totalPages;
+    int pageNo;
+    int totalPages;
 }

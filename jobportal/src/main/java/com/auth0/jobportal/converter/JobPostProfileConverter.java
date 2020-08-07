@@ -2,7 +2,9 @@ package com.auth0.jobportal.converter;
 
 import com.auth0.jobportal.entity.JobPostProfileEntity;
 import com.auth0.jobportal.model.JobPostProfileDto;
+import org.springframework.stereotype.Component;
 
+@Component
 public class JobPostProfileConverter {
 
 //    public static JobPostProfileEntity convertJobPostProfileConverterToEntity(JobPostProfileDto jobPostProfileDto){

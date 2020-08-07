@@ -17,10 +17,15 @@ public class ApplicationConstants {
 
   //Jobs Related
   public static final String JOBS_URL=CONTEXT_URL+"/jobs/v1";
-  public static final int JOBS_PER_PAGE=20;
+  public static final int JOBS_PER_PAGE=10;
 
-  //Job Search Related
-  public static final String JOBS_SEARCH="/search-jobs";
+  //Search Related
+  public static final String SEARCH="/search";
+  public static final Integer DEFAULT_RADIUS=5;
+  public static final Integer DEFAULT_JOB_PAGE=0;
+  public static final String INSUFFICIENT_SEARCH_PARAMETERS="Enter coordinates or area or city";
+
+
 
   //Job Error
   public static final String ERR_MSG_INVALID_JOB_ID= "Invalid Job ID, please try again";

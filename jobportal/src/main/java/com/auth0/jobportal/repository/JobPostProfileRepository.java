@@ -26,6 +26,10 @@ public class JobPostProfileRepository {
         return jpaJobPostProfileRepository.findById(id);
     }
 
+    public Page<JobPostProfileEntity> findByIdIn(List<UUID> ids,int pageNo){
+        return jpaJobPostProfileRepository.findByIdIn(ids, PageRequest.of(pageNo,jobsPerPage, Sort.Direction.DESC,"updated_at"));
+    }
+
     public Page<JobPostProfileEntity> findByUserIdWithPage(UUID userId,int pageNo){
         return jpaJobPostProfileRepository.findByUserId(userId, PageRequest.of(pageNo,jobsPerPage, Sort.Direction.DESC,"updated_at"));
     }
@@ -33,6 +37,9 @@ public class JobPostProfileRepository {
 //    public Page<JobPostProfileEntity> findByBetweenLocationUUID userId,int radius){
 //        return jpaJobPostProfileRepository.findByUserId(userId, PageRequest.of(pageNo,jobsPerPage, Sort.Direction.DESC,"updated_at"));
 //    }
+
+
+
 
 
     public JobPostProfileEntity saveJob(JobPostProfileEntity jobPostProfileEntity){

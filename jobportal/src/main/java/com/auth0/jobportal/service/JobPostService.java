@@ -52,7 +52,8 @@ public class JobPostService {
     public JobPostProfiles getJobByJobPoster(UUID userId){
 
         List<JobPostProfileDto> jobProfiles=new LinkedList<>();
-        jobPostProfileRepository.findByUserIdWithPage(userId,0).forEach((a)->{
+        Page<JobPostProfileEntity> cur=jobPostProfileRepository.findByUserIdWithPage(userId,0);
+        cur.forEach((a)->{
             jobProfiles.add(jobPostProfileConverter.createJobEntityToToDto(a));
         });
         List<JobPostProfileDto> jobProfilesNext=new LinkedList<>();
@@ -60,7 +61,7 @@ public class JobPostService {
             jobProfiles.add(jobPostProfileConverter.createJobEntityToToDto(a));
         });
 
-        return new JobPostProfiles(jobProfiles,jobProfilesNext,null);
+        return new JobPostProfiles(jobProfiles,jobProfilesNext,null,0,cur.getTotalPages());
     }
 
     public JobPostProfiles getJobByJobPosterAtPage(UUID userId,int page){
@@ -87,7 +88,34 @@ public class JobPostService {
             });
         }
 
-        return new JobPostProfiles(jobProfiles,jobProfilesNext,jobProfilesPrev);
+        return new JobPostProfiles(jobProfiles,jobProfilesNext,jobProfilesPrev,page,cur.getTotalPages());
+    }
+
+    public JobPostProfiles getJobByIds(List<UUID> ids,int page){
+        List<JobPostProfileDto> jobProfiles=new LinkedList<>();
+
+        Page<JobPostProfileEntity> cur=jobPostProfileRepository.findByIdIn(ids,page);
+        cur.forEach((a)->{
+            jobProfiles.add(jobPostProfileConverter.createJobEntityToToDto(a));
+        });
+
+        List<JobPostProfileDto> jobProfilesNext=null;
+        if(page!=cur.getTotalPages()) {
+            jobProfilesNext = new LinkedList<>();
+            jobPostProfileRepository.findByIdIn(ids, page + 1).forEach((a) -> {
+                jobProfiles.add(jobPostProfileConverter.createJobEntityToToDto(a));
+            });
+        }
+
+        List<JobPostProfileDto> jobProfilesPrev=null;
+        if(page!=0) {
+            jobProfilesPrev= new LinkedList<>();
+            jobPostProfileRepository.findByIdIn(ids, page - 1).forEach((a) -> {
+                jobProfiles.add(jobPostProfileConverter.createJobEntityToToDto(a));
+            });
+        }
+
+        return new JobPostProfiles(jobProfiles,jobProfilesNext,jobProfilesPrev,page,cur.getTotalPages());
     }
 
     public JobReviewsDto getJobReviews(UUID jobId){

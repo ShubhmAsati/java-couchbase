@@ -13,16 +13,21 @@ public class GeoLocationEntity extends BaseEntity{
     @Column(name = "GEO_LOC_ID")
     private UUID geoLocId;
 
-    @Column(name="GEO_COORDINATES")
-    private Point geoCoordinates;      //point_type
+//    @Column(name="GEO_COORDINATES")
+//    private Point geoCoordinates;      //point_type
 
-    @Column(name="USER_ID")
-    private UUID user;
+    //private Point coordinates;
 
-    @Column(name="USER_TYPE")
-    private String userType;
+    private Double latitude;
 
-    //private String latitude;
+    private Double longitude;
 
-    //private String longitude;
+    @Column(name="OBJECT_ID")
+    private UUID objectID;
+
+    @Column(name="OBJECT_TYPE")
+    private String objectType;
+    //Use TypeEnum
+
+
 }

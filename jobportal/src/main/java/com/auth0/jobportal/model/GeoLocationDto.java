@@ -11,7 +11,12 @@ public class GeoLocationDto {
 
   private UUID geoLocId;
 
-  private Point geoCoordinates;      //point_type
+  private Point coordinates;      //point_type
+
+  private UUID objectId;
+
+  private String objectType;
+
 
 //  private String latitude;
 //
