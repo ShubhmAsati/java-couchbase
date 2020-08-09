@@ -5,10 +5,13 @@ import com.auth0.jobportal.converter.JobReviewsConverter;
 import com.auth0.jobportal.entity.JobPostProfileEntity;
 import com.auth0.jobportal.exception.InvalidJobIdException;
 import com.auth0.jobportal.exception.InvalidJobReviewCreationException;
+import com.auth0.jobportal.exception.InvalidUserException;
 import com.auth0.jobportal.exception.JobFinderBaseException;
 import com.auth0.jobportal.model.JobPostProfileDto;
 import com.auth0.jobportal.model.JobReviewsDto;
+import com.auth0.jobportal.model.request.JobProfileRequest;
 import com.auth0.jobportal.model.response.JobPostProfiles;
+import com.auth0.jobportal.repository.AddressRepository;
 import com.auth0.jobportal.repository.JobPostProfileRepository;
 
 import com.auth0.jobportal.repository.JobReviewsRepository;
@@ -26,24 +29,31 @@ public class JobPostService {
 
 
     private final JobPostProfileRepository jobPostProfileRepository;
+    private final AddressRepository addressRepository;
     private  final JobReviewsRepository jobReviewsRepository;
 
-    private final JobPostProfileConverter jobPostProfileConverter;
-    private final JobReviewsConverter jobReviewsConverter;
+    //private final JobPostProfileConverter jobPostProfileConverter;
+    //private final JobReviewsConverter jobReviewsConverter;
 
     //create
-    public JobPostProfileDto postJob(JobPostProfileDto jobPostProfileDto) throws JobFinderBaseException {
+    public JobPostProfileDto postJob(JobProfileRequest jobProfileRequest) throws JobFinderBaseException {
         JobPostProfileEntity jobPostProfileEntity=
-                jobPostProfileConverter.createJobDtoToToEntity(jobPostProfileDto);
+                JobPostProfileConverter.postRequestToEntity(jobProfileRequest);
         jobPostProfileEntity.setApplicants(0);
+        if(jobPostProfileEntity.getAddress()!=null){
+            addressRepository.save(jobPostProfileEntity.getAddress());
+        }
+        if(jobPostProfileEntity.getUser().getId()==null){
+            throw new InvalidUserException();
+        }
         jobPostProfileRepository.saveJob(jobPostProfileEntity);
-        return jobPostProfileConverter.createJobEntityToToDto(jobPostProfileEntity);
+        return JobPostProfileConverter.createJobEntityToToDto(jobPostProfileEntity);
 
     }
 
     //retrieve
     public JobPostProfileDto getJobById(UUID id){
-        return jobPostProfileConverter.createJobEntityToToDto(
+        return JobPostProfileConverter.createJobEntityToToDto(
                 jobPostProfileRepository.findById(id).orElseThrow(()-> new InvalidJobIdException(id)));
 
     }
@@ -54,11 +64,11 @@ public class JobPostService {
         List<JobPostProfileDto> jobProfiles=new LinkedList<>();
         Page<JobPostProfileEntity> cur=jobPostProfileRepository.findByUserIdWithPage(userId,0);
         cur.forEach((a)->{
-            jobProfiles.add(jobPostProfileConverter.createJobEntityToToDto(a));
+            jobProfiles.add(JobPostProfileConverter.createJobEntityToToDto(a));
         });
         List<JobPostProfileDto> jobProfilesNext=new LinkedList<>();
         jobPostProfileRepository.findByUserIdWithPage(userId,1).forEach((a)->{
-            jobProfiles.add(jobPostProfileConverter.createJobEntityToToDto(a));
+            jobProfiles.add(JobPostProfileConverter.createJobEntityToToDto(a));
         });
 
         return new JobPostProfiles(jobProfiles,jobProfilesNext,null,0,cur.getTotalPages());
@@ -69,14 +79,14 @@ public class JobPostService {
 
         Page<JobPostProfileEntity> cur=jobPostProfileRepository.findByUserIdWithPage(userId,page);
         cur.forEach((a)->{
-            jobProfiles.add(jobPostProfileConverter.createJobEntityToToDto(a));
+            jobProfiles.add(JobPostProfileConverter.createJobEntityToToDto(a));
         });
 
         List<JobPostProfileDto> jobProfilesNext=null;
         if(page!=cur.getTotalPages()) {
             jobProfilesNext = new LinkedList<>();
             jobPostProfileRepository.findByUserIdWithPage(userId, page + 1).forEach((a) -> {
-                jobProfiles.add(jobPostProfileConverter.createJobEntityToToDto(a));
+                jobProfiles.add(JobPostProfileConverter.createJobEntityToToDto(a));
             });
         }
 
@@ -84,7 +94,7 @@ public class JobPostService {
         if(page!=0) {
             jobProfilesPrev= new LinkedList<>();
             jobPostProfileRepository.findByUserIdWithPage(userId, page - 1).forEach((a) -> {
-                jobProfiles.add(jobPostProfileConverter.createJobEntityToToDto(a));
+                jobProfiles.add(JobPostProfileConverter.createJobEntityToToDto(a));
             });
         }
 
@@ -96,14 +106,14 @@ public class JobPostService {
 
         Page<JobPostProfileEntity> cur=jobPostProfileRepository.findByIdIn(ids,page);
         cur.forEach((a)->{
-            jobProfiles.add(jobPostProfileConverter.createJobEntityToToDto(a));
+            jobProfiles.add(JobPostProfileConverter.createJobEntityToToDto(a));
         });
 
         List<JobPostProfileDto> jobProfilesNext=null;
         if(page!=cur.getTotalPages()) {
             jobProfilesNext = new LinkedList<>();
             jobPostProfileRepository.findByIdIn(ids, page + 1).forEach((a) -> {
-                jobProfiles.add(jobPostProfileConverter.createJobEntityToToDto(a));
+                jobProfiles.add(JobPostProfileConverter.createJobEntityToToDto(a));
             });
         }
 
@@ -111,7 +121,7 @@ public class JobPostService {
         if(page!=0) {
             jobProfilesPrev= new LinkedList<>();
             jobPostProfileRepository.findByIdIn(ids, page - 1).forEach((a) -> {
-                jobProfiles.add(jobPostProfileConverter.createJobEntityToToDto(a));
+                jobProfiles.add(JobPostProfileConverter.createJobEntityToToDto(a));
             });
         }
 
@@ -119,7 +129,7 @@ public class JobPostService {
     }
 
     public JobReviewsDto getJobReviews(UUID jobId){
-        return jobReviewsConverter.reviewsEntityToDto(
+        return JobReviewsConverter.reviewsEntityToDto(
                 jobReviewsRepository.findById(jobId)
                         .orElseThrow(()-> new InvalidJobReviewCreationException(jobId)));
     }
@@ -147,11 +157,11 @@ public class JobPostService {
 
     //update
     public void updateJobById(JobPostProfileDto jobPostProfileDto){
-        jobPostProfileRepository.saveJob(jobPostProfileConverter.createJobDtoToToEntity(jobPostProfileDto));
+        jobPostProfileRepository.saveJob(JobPostProfileConverter.createJobDtoToToEntity(jobPostProfileDto));
     }
 
     public void updateReviews(JobReviewsDto jobReviewsDto){
-        jobReviewsRepository.saveJob(jobReviewsConverter.reviewsDtoToEntity(jobReviewsDto));
+        jobReviewsRepository.saveJob(JobReviewsConverter.reviewsDtoToEntity(jobReviewsDto));
     }
 
     //delete

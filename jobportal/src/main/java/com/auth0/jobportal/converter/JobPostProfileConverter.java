@@ -2,9 +2,11 @@ package com.auth0.jobportal.converter;
 
 import com.auth0.jobportal.entity.JobPostProfileEntity;
 import com.auth0.jobportal.model.JobPostProfileDto;
+import com.auth0.jobportal.model.request.JobProfileRequest;
+import com.vladmihalcea.hibernate.type.range.Range;
 import org.springframework.stereotype.Component;
 
-@Component
+
 public class JobPostProfileConverter {
 
 //    public static JobPostProfileEntity convertJobPostProfileConverterToEntity(JobPostProfileDto jobPostProfileDto){
@@ -15,7 +17,7 @@ public class JobPostProfileConverter {
 //                .gender(jobPostProfileDto.getGender()).build();
 //    }
 
-    public JobPostProfileEntity createJobDtoToToEntity(JobPostProfileDto jobPostProfileDto){
+    public static JobPostProfileEntity createJobDtoToToEntity(JobPostProfileDto jobPostProfileDto){
         return JobPostProfileEntity.builder()
                 .user(jobPostProfileDto.getUser())
                 .address(jobPostProfileDto.getAddress())
@@ -28,7 +30,7 @@ public class JobPostProfileConverter {
                 .build();
     }
 
-    public JobPostProfileDto createJobEntityToToDto(JobPostProfileEntity jobPostProfileEntity){
+    public static JobPostProfileDto createJobEntityToToDto(JobPostProfileEntity jobPostProfileEntity){
         return JobPostProfileDto.builder()
                 .jobId(jobPostProfileEntity.getId())
                 .user(jobPostProfileEntity.getUser())
@@ -38,13 +40,26 @@ public class JobPostProfileConverter {
                 .metadata(jobPostProfileEntity.getMetaData())
                 .workingHours(jobPostProfileEntity.getWorkingHours())
                 .compensation(jobPostProfileEntity.getCompensation())
-                .status(jobPostProfileEntity.isStatus())
+                .status(jobPostProfileEntity.getStatus())
                 .gender(jobPostProfileEntity.getGender())
                 .applicants(jobPostProfileEntity.getApplicants())
                 .build();
     }
 
+    public static JobPostProfileEntity postRequestToEntity(JobProfileRequest jobProfileRequest){
+        Range<Integer> workHours=Range.closed(jobProfileRequest.getWorkingHoursLow(),jobProfileRequest.getWorkingHoursHigh());
+        Range<Integer> compensation=Range.closed(jobProfileRequest.getCompensationLow(),jobProfileRequest.getCompensationHigh());
+        return JobPostProfileEntity.builder()
+                .user(jobProfileRequest.getUser())
+                .address(jobProfileRequest.getAddress())
+                .jobDescription(jobProfileRequest.getJobDescription())
+                .jobType(jobProfileRequest.getJobType())
+                .metaData(jobProfileRequest.getMetadata())
+                .workingHours(workHours)
+                .compensation(compensation)
+                .gender(jobProfileRequest.getGender())
+                .build();
 
-
+    }
 
 }

@@ -26,7 +26,6 @@ public class JobPostProfileEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "JOB_ID")
     private UUID id;
 
 
@@ -52,13 +51,13 @@ public class JobPostProfileEntity extends BaseEntity {
     private Range<Integer> workingHours;
 
     @Column(name = "IS_DELETED")
-    private boolean isDeleted;
+    private Boolean isDeleted;
 
     private Range<Integer> compensation;
 
-    private boolean status;
+    private Boolean status;
 
-    private long applicants;
+    private Integer applicants;
 
-    private char gender;
+    private String gender;
 }

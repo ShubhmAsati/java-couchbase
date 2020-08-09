@@ -25,12 +25,12 @@ public class SearchController {
     //retrieve
     @GetMapping("/jobs")
     public ResponseEntity<?> getJobs
-            (@Valid @RequestParam("latitude") Optional<Double> latitude,
-             @Valid @RequestParam("longitude")Optional<Double> longitude,
-             @Valid @RequestParam("area")Optional<String> area,
-             @Valid @RequestParam("city")Optional<String> city,
-             @Valid @RequestParam("pageNo")Optional<Integer> pageNo,
-             @Valid @RequestParam("radius")Optional<Integer> radius){
+            ( @RequestParam("latitude") Optional<Double> latitude,
+              @RequestParam("longitude")Optional<Double> longitude,
+              @RequestParam("area")Optional<String> area,
+              @RequestParam("city")Optional<String> city,
+              @RequestParam("pageNo")Optional<Integer> pageNo,
+              @RequestParam("radius")Optional<Integer> radius){
         if(latitude.isPresent() && longitude.isPresent())
             return ResponseEntity.status(HttpStatus.FOUND)
                     .body(geoLocatorService.getJobsByCoordinates(latitude.get(),longitude.get(),
@@ -46,13 +46,13 @@ public class SearchController {
 
     @GetMapping("/users")
     public ResponseEntity<?> getUsers
-            (@Valid @RequestParam("latitude") Optional<Double> latitude,
-             @Valid @RequestParam("longitude")Optional<Double> longitude,
-             @Valid @RequestParam("area")Optional<String> area,
-             @Valid @RequestParam("city")Optional<String> city,
-             @Valid @RequestParam("pageNo")Optional<Integer> pageNo,
-             @Valid @RequestParam("radius")Optional<Integer> radius,
-             @Valid @RequestParam("type")Optional<String> type){
+            ( @RequestParam("latitude") Optional<Double> latitude,
+              @RequestParam("longitude")Optional<Double> longitude,
+              @RequestParam("area")Optional<String> area,
+              @RequestParam("city")Optional<String> city,
+              @RequestParam("pageNo")Optional<Integer> pageNo,
+              @RequestParam("radius")Optional<Integer> radius,
+              @RequestParam("type")Optional<String> type){
         if(latitude.isPresent() && longitude.isPresent())
             return ResponseEntity.status(HttpStatus.FOUND)
                     .body(geoLocatorService.getUsersByCoordinates(latitude.get(),longitude.get(),

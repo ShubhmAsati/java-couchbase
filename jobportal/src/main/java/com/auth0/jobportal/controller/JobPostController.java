@@ -3,6 +3,7 @@ package com.auth0.jobportal.controller;
 import com.auth0.jobportal.constants.ApplicationConstants;
 import com.auth0.jobportal.model.JobPostProfileDto;
 import com.auth0.jobportal.model.JobReviewsDto;
+import com.auth0.jobportal.model.request.JobProfileRequest;
 import com.auth0.jobportal.model.response.JobPostProfiles;
 import com.auth0.jobportal.service.JobPostService;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +26,9 @@ public class JobPostController {
     //create
     //job
     @PostMapping("/post-job")
-    public ResponseEntity<JobPostProfileDto> postJob(@Valid @RequestBody JobPostProfileDto jobPostProfileDto){
-        return ResponseEntity.status(HttpStatus.CREATED).body(jobPostService.postJob(jobPostProfileDto));
+    public ResponseEntity<JobPostProfileDto> postJob(@Valid @RequestBody JobProfileRequest jobProfileRequest){
+        //jobPostProfileDto.getWorkingHours()
+        return ResponseEntity.status(HttpStatus.CREATED).body(jobPostService.postJob(jobProfileRequest));
     }
 
     //reviews

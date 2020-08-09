@@ -11,6 +11,7 @@ public class GeoLocationEntity extends BaseEntity{
 
     @Id
     @Column(name = "GEO_LOC_ID")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID geoLocId;
 
 //    @Column(name="GEO_COORDINATES")

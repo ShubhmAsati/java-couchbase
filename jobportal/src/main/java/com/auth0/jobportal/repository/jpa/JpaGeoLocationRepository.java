@@ -13,10 +13,10 @@ import java.util.UUID;
 @Repository
 public interface JpaGeoLocationRepository extends JpaRepository<GeoLocationEntity, UUID> {
 
-    @Query(value = "SELECT OBJECTS FROM GEO_LOCATION WHERE TYPE= :type AND " +
-            "LATITUDE BETWEEN (:latMin,:longMin) AND LONGITUDE BETWEEN (:longMin,:longMax) " +
-            "AND (LATITUDE!= :latitude AND LONGITUDE!= :longitude)" +
-            "ORDER BY calculate_distance(LATITUDE,LONGITUDE,:latitude,:longitude)"
+    @Query(value = "SELECT OBJECT_ID FROM GEO_LOCATION WHERE TYPE= :type AND " +
+            "LATITUDE BETWEEN (:latMin,:longMin) AND LONGITUDE BETWEEN (:latMax,:longMax) " +
+            "AND (LATITUDE!= :lat AND LONGITUDE!= :lng)" //+
+            //"ORDER BY calculate_distance(LATITUDE,LONGITUDE,:lat,:lng)"
              , nativeQuery = true)
       Page<UUID> getObjectsByCoordinatesAndTypePerPage
             (@Param("lat") Double latitude, @Param("lng") Double longitude, @Param("latMax") Double latMax,

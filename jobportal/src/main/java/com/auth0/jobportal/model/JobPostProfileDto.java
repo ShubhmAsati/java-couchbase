@@ -6,16 +6,8 @@ import com.auth0.jobportal.entity.UsersEntity;
 import com.vladmihalcea.hibernate.type.range.Range;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.sql.Date;
 import java.util.UUID;
 
 @Data
@@ -25,12 +17,10 @@ public class JobPostProfileDto {
 
     private UUID jobId;
 
-    @NotBlank(message=" Cannot be Blank")
-    @NotNull(message = " Cannot be NUll ")
+
     private UsersEntity user;
 
-    @NotBlank(message=" Cannot be Blank")
-    @NotNull(message = " Cannot be NUll ")
+
     private AddressEntity address;
 
     @NotBlank(message=" Cannot be Blank")
@@ -53,13 +43,13 @@ public class JobPostProfileDto {
 
     @NotBlank(message=" Cannot be Blank")
     @NotNull(message = " Cannot be NUll ")
-    private boolean status;
+    private Boolean status;
 
     @NotBlank(message=" Cannot be Blank")
     @NotNull(message = " Cannot be NUll ")
-    private char gender;
+    private String gender;
 
-    private long applicants;
+    private Integer applicants;
 
     private String metadata;
 
