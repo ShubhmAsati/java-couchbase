@@ -12,16 +12,13 @@ import javax.validation.constraints.NotNull;
 @Data
 public class AddressDto {
 
-    @NotBlank(message=" Cannnot be Blank")
-    @NotNull(message = " Cannot be NUll ")
+
     private long addressId;
 
-    @NotBlank(message=" Cannnot be Blank")
-    @NotNull(message = " Cannot be NUll ")
+
     private String city;
 
-    @NotBlank(message=" Cannnot be Blank")
-    @NotNull(message = " Cannot be NUll ")
+
     private String state;
 
     @NotBlank(message=" Cannnot be Blank")

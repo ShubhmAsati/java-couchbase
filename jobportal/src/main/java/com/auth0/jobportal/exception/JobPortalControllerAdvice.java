@@ -18,6 +18,7 @@ public class JobPortalControllerAdvice {
   private static final String INTERNAL_SERVER_ERROR = "INTERNAL_SERVER_ERROR";
   private static final String VALIDATION_ERROR = "VALIDATION_ERROR";
   private static final String NOT_FOUND_EXCEPTION = "NOT_FOUND_EXCEPTION";
+  private static final String ID_ERROR="INVALID_ ID";
 
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ErrorResponse> handleException(Exception e) {
@@ -60,6 +61,20 @@ public class JobPortalControllerAdvice {
     log.info(VALIDATION_ERROR, e);
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(buildErrorResponse(e.getMessage()));
   }
+
+  @ExceptionHandler(InvalidJobIdException.class)
+  public ResponseEntity<ErrorResponse> handleIdAlreadyExistException(
+          InvalidJobIdException e) {
+    log.info(ID_ERROR, e);
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(buildErrorResponse(e.getMessage()));
+  }
+  @ExceptionHandler(InvalidUserException.class)
+  public ResponseEntity<ErrorResponse> handleInvalidUserException(
+          InvalidUserException e) {
+    log.info(ID_ERROR, e);
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(buildErrorResponse(e.getMessage()));
+  }
+
 
   private ErrorResponse buildErrorResponse(String message) {
     return ErrorResponse.builder()

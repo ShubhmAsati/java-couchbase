@@ -40,11 +40,11 @@ CREATE TABLE IF NOT EXISTS auth0.address (
 
 -- DROP TABLE auth0.geo_location;
 
-CREATE TABLE IF NOT EXISTS auth0.geo_location (
-	geo_location_id varchar NULL,
-	geo_coordinates varchar NULL,
-	user_id varchar NULL,
-	user_type varchar NULL
+CREATE TABLE IF NOT EXISTS auth0.GEO_LOCATION (
+	GEO_LOC_ID varchar NULL,
+	GEO_COORDINATES POINT_TYPE NULL,
+	USER_ID varchar NULL,
+	USER_TYPE varchar NULL
 );
 
 
@@ -60,6 +60,7 @@ CREATE TABLE IF NOT EXISTS auth0.users_details (
 	first_name varchar NULL,
 	last_name varchar NULL,
 	address_id varchar NULL,
+
 	CONSTRAINT users_details_pk PRIMARY KEY (user_id)
 );
 
@@ -75,21 +76,26 @@ ALTER TABLE auth0.users_details ADD CONSTRAINT users_details_fk_1 FOREIGN KEY (a
 
 -- DROP TABLE auth0.job_post;
 
-CREATE TABLE IF NOT EXISTS auth0.job_post (
-	job_id varchar NOT NULL,
-	user_id varchar NOT NULL,
-	job_description varchar NULL,
-	updated_date varchar NULL,
-	created_date varchar NULL,
-	job_type varchar NULL,
-	status varchar NULL,
-	metadata json NULL,
-	contact_details json NULL,
-	compensation int8range NULL,
-	is_deleted bool NULL,
-	address_id varchar NULL,
-	working_hours int4 NULL,
-	gender varchar NULL,
+CREATE TABLE IF NOT EXISTS auth0.JOB_POST_PROFILE (
+	JOB_ID varchar NOT NULL,
+	USER_ID varchar NOT NULL,
+	ADDRESS_ID varchar NULL,
+	JOB_DESC varchar NULL,
+	JOB_TYPE varchar NULL,
+	METADATA json NULL,
+	WORKING_HOURS int4 NULL,
+	IS_DELETED bool NULL,
+	COMPENSATION int8range NULL,
+	STATUS varchar NULL,
+	CONTACT_DETAILS json NULL,
+	GENDER varchar NULL,
+	APPLICANTS int NULL;
+
+	UPDATED_DATE varchar NULL,
+    CREATED_DATE varchar NULL,
+
+
+
 	CONSTRAINT job_post_pk PRIMARY KEY (job_id),
 	CONSTRAINT job_post_un UNIQUE (user_id, job_id)
 );
@@ -106,30 +112,30 @@ ALTER TABLE auth0.job_post ADD CONSTRAINT job_post_fk_1 FOREIGN KEY (address_id)
 
 -- DROP TABLE auth0.job_post;
 
-CREATE TABLE IF NOT EXISTS auth0.job_post (
-	job_id varchar NOT NULL,
-	user_id varchar NOT NULL,
-	job_description varchar NULL,
-	updated_date varchar NULL,
-	created_date varchar NULL,
-	job_type varchar NULL,
-	status varchar NULL,
-	metadata json NULL,
-	contact_details json NULL,
-	compensation int8range NULL,
-	is_deleted bool NULL,
-	address_id varchar NULL,
-	working_hours int4 NULL,
-	gender varchar NULL,
-	CONSTRAINT job_post_pk PRIMARY KEY (job_id),
-	CONSTRAINT job_post_un UNIQUE (user_id, job_id)
-);
-
-
--- auth0.job_post foreign keys
-
-ALTER TABLE auth0.job_post ADD CONSTRAINT job_post_fk FOREIGN KEY (user_id) REFERENCES users(user_id);
-ALTER TABLE auth0.job_post ADD CONSTRAINT job_post_fk_1 FOREIGN KEY (address_id) REFERENCES address(address_id);
+--CREATE TABLE IF NOT EXISTS auth0.job_post (
+--	job_id varchar NOT NULL,
+--	user_id varchar NOT NULL,
+--	job_description varchar NULL,
+--	updated_date varchar NULL,
+--	created_date varchar NULL,
+--	job_type varchar NULL,
+--	status varchar NULL,
+--	metadata json NULL,
+--	contact_details json NULL,
+--	compensation int8range NULL,
+--	is_deleted bool NULL,
+--	address_id varchar NULL,
+--	working_hours int4 NULL,
+--	gender varchar NULL,
+--	CONSTRAINT job_post_pk PRIMARY KEY (job_id),
+--	CONSTRAINT job_post_un UNIQUE (user_id, job_id)
+--);
+--
+--
+---- auth0.job_post foreign keys
+--
+--ALTER TABLE auth0.job_post ADD CONSTRAINT job_post_fk FOREIGN KEY (user_id) REFERENCES users(user_id);
+--ALTER TABLE auth0.job_post ADD CONSTRAINT job_post_fk_1 FOREIGN KEY (address_id) REFERENCES address(address_id);
 
 -- auth0.job_reviews definition
 
@@ -137,9 +143,9 @@ ALTER TABLE auth0.job_post ADD CONSTRAINT job_post_fk_1 FOREIGN KEY (address_id)
 
 -- DROP TABLE auth0.job_reviews;
 
-CREATE TABLE IF NOT EXISTS auth0.job_reviews (
-	job_id varchar NOT NULL,
-	"comments" json NULL,
+CREATE TABLE IF NOT EXISTS auth0.JOB_REVIEWS (
+	JOB_ID varchar NOT NULL,
+	REVIEWS json NULL,
 	CONSTRAINT job_reviews_pk PRIMARY KEY (job_id)
 );
 
@@ -171,18 +177,20 @@ CREATE TABLE IF NOT EXISTS auth0.chat_history (
 
 -- DROP TABLE auth0.job_seeker_profile;
 
-CREATE TABLE IF NOT EXISTS auth0.job_seeker_profile (
-	job_id varchar NOT NULL,
-	user_id varchar NULL,
-	job_description varchar NULL,
-	job_type varchar NULL,
-	created_date varchar NULL,
-	updated_date varchar NULL,
-	address_id varchar NULL,
-	compensation int8range NULL,
-	working_hours int4 NULL,
-	metadata json NULL,
-	is_deleted bool NULL,
+CREATE TABLE IF NOT EXISTS auth0.JOB_SEEKER_PROFILE (
+	JOB_ID varchar NOT NULL,
+	USER_ID varchar NULL,
+	JOB_DESC varchar NULL,
+	JOB_TYPE varchar NULL,
+	ADDRESS_ID varchar NULL,
+	COMPENSATION int8range NULL,
+	WORKING_HOURS int4 NULL,
+	METADATA json NULL,
+	IS_DELETED bool NULL,
+
+	CREATED_DATE varchar NULL,
+    UPDATED_DATE varchar NULL,
+
 	CONSTRAINT job_seeker_profile_pk PRIMARY KEY (job_id)
 );
 
